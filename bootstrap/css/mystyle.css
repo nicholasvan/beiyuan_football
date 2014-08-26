@@ -1,0 +1,17 @@
+/*
+ * mystyle.css
+ * Copyright (C) 2014 wangkun
+ *
+ * Distributed under terms of the MIT license.
+ */
+
+body {
+	background: white;
+	color: black;
+}
+
+.mylogin {
+    background-color: gray;
+    width: 120px;
+    margin: auto;
+}
