@@ -5,14 +5,15 @@
  */
 class Weixin extends CI_Controller {
     public function index() {
-	$echoStr = $_GET['echostr'];
+        die('woow');
+        $echoStr = $_GET['echostr'];
         if ($echoStr) {
-		if ($this->checkSignature()) {
-			echo $echoStr;
-			exit;
-		}
-	}
-	$this->responseMsg();
+            if ($this->checkSignature()) {
+                echo $echoStr;
+                exit;
+            }
+        }
+        $this->responseMsg();
     }
 
 
@@ -155,5 +156,17 @@ class Weixin extends CI_Controller {
             }
         }
 		return $ret;
+    }
+
+    public function test(){
+        /*
+        echo "test";
+        $type = 'assis';
+        $name = '文捷';
+        $type = $_GET['t'];
+        $name = $_GET['n'];
+        $this->load->model('weixinm');
+        $this->weixinm->recordStatic($type, $name);
+         */
     }
 }
