@@ -5,7 +5,6 @@ class Personal extends CI_Model {
         $this->load->database();
     }
 
-    public function reply($content)
-    {
+    public function recordStatic($type, $name){
     }
 }
