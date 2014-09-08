@@ -5,7 +5,6 @@
  */
 class Weixin extends CI_Controller {
     public function index() {
-        die('woow');
         $echoStr = $_GET['echostr'];
         if ($echoStr) {
             if ($this->checkSignature()) {
@@ -92,20 +91,20 @@ class Weixin extends CI_Controller {
 	private function parseKeyword($keyword)
 	{
         $patterns = array(
-            '/帮助/' => '', 
-            '/注册#(.+)/' => "注册：注册个人信息\n输入格式: \n注册#姓名#位置1#位置2，\n可以只注册一个位置", 
-            '/报名#(.+)/' => "报名：报名参加活动\n输入格式: \n报名#0824 或者 报名#待定#0824", 
-            '/创建#(.+)/' => "创建：创建活动\n输入格式: \n创建#日期(月日, 例0824)#人数#时间#地点#其他说明(可不填)", 
-            '/活动(.*)/' => "活动: 查看本周活动或者是某日活动详情\n输入格式：\n活动 或者 活动#0824", 
-            '/分组(.*)/' => "分组：查看某日分组情况\n输入格式：\n分组 或者 分组#0824",
-            '/随机/' => '随机分组',
-            '/数据/' => '数据：查看某日比赛的数据(暂不开放)',
+            '/帮助/'             => '',
             '/(进球|助攻)#(.+)/' => "进球/助攻统计",
+            '/注册#(.+)/'        => "注册：注册个人信息\n输入格式: \n注册#姓名#位置1#位置2，\n可以只注册一个位置",
+            '/报名#(.+)/'        => "报名：报名参加活动\n输入格式: \n报名#0824 或者 报名#待定#0824",
+            '/创建#(.+)/'        => "创建：创建活动\n输入格式: \n创建#日期(月日, 例0824)#人数#时间#地点#其他说明(可不填)",
+            '/活动(.*)/'         => "活动: 查看本周活动或者是某日活动详情\n输入格式：\n活动 或者 活动#0824",
+            '/分组(.*)/'         => "分组：查看某日分组情况\n输入格式：\n分组 或者 分组#0824",
+            '/随机/'             => '随机分组',
+            '/数据/'             => '数据：查看某日比赛的数据(暂不开放)',
         );
         $ret = "输入信息找不到对应内容, 请输入‘帮助’查看更多信息";
         foreach ($patterns as $pattern => $info) {
             if (preg_match($pattern, $keyword, $matches)) {
-					error_log($pattern);
+                error_log($pattern);
                 switch ($pattern) {
                 case '/帮助/':
                     $ret = "可以输入下列关键词：\n";
@@ -147,9 +146,14 @@ class Weixin extends CI_Controller {
                     if($matches[1]){
                         $type = $matches[1];
                         $name = $matches[2];
-                        $this->load->model('weixin');
-                        $this->weixin->recordStatic($type, $name);
+                        $this->load->model('weixinm');
+                        $r_num = $this->weixinm->recordStatic($type, $name);
+                        $ret = "$name $type 总数:$r_num";
                     }
+                    break;
+                case '/数据/':
+                    $this->load->model('weixinm');
+                    $ret = $this->weixinm->total();
                     break;
                 }
                 break;
@@ -159,14 +163,9 @@ class Weixin extends CI_Controller {
     }
 
     public function test(){
-        /*
-        echo "test";
         $type = 'assis';
         $name = '文捷';
-        $type = $_GET['t'];
-        $name = $_GET['n'];
-        $this->load->model('weixinm');
-        $this->weixinm->recordStatic($type, $name);
-         */
+        $this->load->database();
+        echo "test";
     }
 }
