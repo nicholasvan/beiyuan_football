@@ -73,7 +73,7 @@ class Weixin extends CI_Controller {
 			$MsgType    = $postObj->MsgType;
 			$toUsername = $postObj->toUsername;
 			$keyword    = $postObj->Content;
-			error_log(print_r($postObj, true));
+			//error_log(print_r($postObj, true));
 			switch ($MsgType) {
 			case 'event':
 					$Event = $postObj->Event;
@@ -158,9 +158,10 @@ class Weixin extends CI_Controller {
                     break;
                 case '/随机:(.*)(\d+)组/':
                     $ret = "";
-                    $keyword = str_replace("：", ":", $keyword);
-                    $keyword = str_replace("，", ",", $keyword);
+                    $matches[1] = str_replace("：", ":", $matches[1]);
+                    $matches[1] = str_replace("，", ",", $matches[1]);
                     $members = trim($matches[1]);
+                    $members_list = explode(',', $members);
                     shuffle($members_list);
                     $teams   = $matches[2] ? $matches[2] : 3;
                     $final_player = array_chunk($members_list, ceil(count($members_list) / $teams));
