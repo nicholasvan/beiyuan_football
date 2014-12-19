@@ -98,7 +98,7 @@ class Weixin extends CI_Controller {
             '/创建#(.+)/'        => "创建：创建活动\n输入格式: \n创建#日期(月日, 例0824)#人数#时间#地点#其他说明(可不填)",
             '/活动(.*)/'         => "活动: 查看本周活动或者是某日活动详情\n输入格式：\n活动 或者 活动#0824",
             '/分组(.*)/'         => "分组：查看某日分组情况\n输入格式：\n分组 或者 分组#0824",
-            '/随机/'             => '随机分组',
+            '/随机:(.*)/'        => '随机分组',
             '/数据/'             => '数据：查看某日比赛的数据(暂不开放)',
         );
         $ret = "输入信息找不到对应内容, 请输入‘帮助’查看更多信息";
@@ -129,7 +129,8 @@ class Weixin extends CI_Controller {
                     break;
                 case '/活动(.*)/':
                     break;
-                case '/分组(.*)/':
+                case '/分组:(.*)(/d)组/':
+                    /*
                     if ($matches[1]) {
                         $group   = trim('#', $matches[1]);
                         $g_array = explode('#', $group);
@@ -142,6 +143,7 @@ class Weixin extends CI_Controller {
                         $ret = "老刘，天宇，中原，小李，糊涂，周玺，丁强\nJJ，陈路，叮当，一杰，孙剑，雷总，海天\n定坤，林云，大薛，亚鹏，文捷，大山，老韩";
 					}
                     break;
+                     */
                 case '/(进球|助攻)#(.+)/':
                     if($matches[1]){
                         $type = $matches[1];
@@ -155,8 +157,23 @@ class Weixin extends CI_Controller {
                     $this->load->model('weixinm');
                     $ret = $this->weixinm->total();
                     break;
+                case '/随机:(.*)(/d)组/':
+                    $keyword = str_replace("：", ":", $keyword);
+                    $keyword = str_replace("，", ",", $keyword);
+                    $members = trim($matches[1]);
+                    $members_list = explode(',', $members);
+                    shuffle($members_list);
+                    $teams   = $matches[2] ? $matches[2] : 3;
+                    $final_player = array_chunk($members_list, ceil(count($members_list) / $teams));
+                    foreach ($final_player as $t => $mm) {
+                        echo "分组".($t+1).":";
+                        foreach ($mm as $name) {
+                            echo "$name ";
+                        }
+                        echo "\n";
+                    }
+                    break;
                 }
-                break;
             }
         }
 		return $ret;
