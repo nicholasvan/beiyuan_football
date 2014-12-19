@@ -162,8 +162,8 @@ class Weixin extends CI_Controller {
                     $keyword = str_replace("，", ",", $keyword);
                     $members = trim($matches[1]);
                     shuffle($members_list);
-
-                    error_log("wowo");
+                    $teams   = $matches[2] ? $matches[2] : 3;
+                    $final_player = array_chunk($members_list, ceil(count($members_list) / $teams));
                     foreach ($final_player as $t => $mm) {
                         $ret .= "分组".($t+1).":";
                         foreach ($mm as $name) {
@@ -171,7 +171,6 @@ class Weixin extends CI_Controller {
                         }
                         $ret .= "\n";
                     }
-                    error_log("ret = $ret");
                     break;
                 }
             }
